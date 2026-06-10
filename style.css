@@ -1,0 +1,367 @@
+/* Nothing OS 2x2 Widget CSS Stylesheet */
+
+@font-face {
+  font-family: 'NDot57';
+  src: url('/fonts/Ndot57-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NType82Mono';
+  src: url('/fonts/NType82Mono-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LetteraMono';
+  src: url('/fonts/LetteraMonoLL-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SpaceMono';
+  src: url('/fonts/SpaceMono-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg-color: #000000;
+  --card-bg: #0A0A0B;
+  --border-color: #1A1A1C;
+  --text-primary: #FFFFFF;
+  --text-secondary: #7F7F82;
+  --accent-red: #FF3F3F;
+  --overlay-bg: #0F0F10;
+  
+  --font-matrix: 'NDot57', monospace;
+  --font-mono: 'NType82Mono', monospace;
+  --font-sans: 'LetteraMono', 'SpaceMono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--bg-color);
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* 2x2 Square Widget Container */
+.widget-container {
+  position: relative;
+  width: calc(100vw - 16px);
+  height: calc(100vh - 16px);
+  max-width: 320px;
+  max-height: 320px;
+  aspect-ratio: 1 / 1;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 28px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 
+              inset 0 0 12px rgba(255, 255, 255, 0.015);
+  transition: border-color 0.2s ease;
+}
+
+.widget-container:active {
+  border-color: #2D2D30;
+}
+
+/* Dragging active states styling */
+.widget-container.drag-up {
+  border-bottom-color: rgba(255, 63, 63, 0.3);
+}
+
+.widget-container.drag-down {
+  border-top-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Widget Content Layout */
+.widget-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header Text (spaced out capital letters) */
+.widget-header {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  color: var(--text-secondary);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+}
+
+/* Balance Display */
+.balance-display-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex-grow: 1;
+  padding-bottom: 8px;
+}
+
+.balance-value {
+  font-family: var(--font-matrix);
+  font-size: 38px;
+  line-height: 1.1;
+  color: var(--text-primary);
+  word-break: break-all;
+  margin: 0;
+  letter-spacing: -0.02em;
+  transition: font-size 0.1s ease;
+}
+
+/* Dot matrix indicators/details */
+.widget-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.sub-label {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+/* Nothing OS signature red accent dot */
+.red-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-red);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-red);
+}
+
+/* Touch Gesture Hint Indicators */
+.swipe-hint {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.swipe-hint.top {
+  top: 8px;
+}
+
+.swipe-hint.bottom {
+  bottom: 8px;
+}
+
+/* sliding overlays (Incoming & Outgoing inputs) */
+.overlay {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--overlay-bg);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Incoming (add) slides down from top */
+.overlay.incoming {
+  top: 0;
+  transform: translateY(-100%);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Outgoing (subtract) slides up from bottom */
+.overlay.outgoing {
+  bottom: 0;
+  transform: translateY(100%);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Overlay Active Class */
+.overlay.active {
+  transform: translateY(0) !important;
+}
+
+/* Overlay Header */
+.overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.overlay-title {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  color: var(--text-secondary);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.overlay-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 8px;
+  margin-right: -8px;
+}
+
+.overlay-close:active {
+  color: var(--text-primary);
+}
+
+/* Input Styles */
+.overlay-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.amount-input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.amount-prefix {
+  font-family: var(--font-matrix);
+  font-size: 28px;
+  color: var(--text-primary);
+  margin-right: 8px;
+}
+
+.outgoing .amount-prefix {
+  color: var(--accent-red);
+}
+
+.amount-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-matrix);
+  font-size: 28px;
+  color: var(--text-primary);
+  padding: 0;
+  margin: 0;
+}
+
+.outgoing .amount-input {
+  color: var(--accent-red);
+}
+
+.amount-input::placeholder {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.outgoing .amount-input::placeholder {
+  color: rgba(255, 63, 63, 0.15);
+}
+
+/* Hide Spin Buttons */
+.amount-input::-webkit-outer-spin-button,
+.amount-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.amount-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Buttons in Overlay */
+.overlay-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  width: 100%;
+}
+
+.action-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  padding: 10px 20px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-btn:active {
+  background-color: var(--text-primary);
+  color: var(--bg-color);
+}
+
+.action-btn.submit {
+  background-color: var(--text-primary);
+  color: var(--bg-color);
+  border-color: var(--text-primary);
+}
+
+.outgoing .action-btn.submit:active {
+  background-color: var(--accent-red);
+  border-color: var(--accent-red);
+  color: var(--text-primary);
+}
+
+.action-btn.submit:active {
+  background-color: #E0E0E0;
+}
+
+/* Dotted grid background overlay effect */
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 16px 16px;
+  pointer-events: none;
+  z-index: 0;
+}

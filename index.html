@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="A minimalist, tactile Nothing OS styled 2x2 widget for tracking your remaining account balance manually.">
+  <meta name="theme-color" content="#000000">
+  
+  <title>balance</title>
+  
+  <link rel="icon" type="image/svg+xml" href="/icon.svg">
+  <link rel="apple-touch-icon" href="/icon.svg">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <!-- Dotted Grid Aesthetic Background -->
+  <div class="grid-overlay" aria-hidden="true"></div>
+
+  <!-- 2x2 Widget Card -->
+  <main class="widget-container" id="widget-card">
+    
+    <!-- Swipe Hints (subtle arrows and signs) -->
+    <div class="swipe-hint top" id="hint-top" aria-hidden="true">↓ ADD</div>
+    <div class="swipe-hint bottom" id="hint-bottom" aria-hidden="true">↑ SUBTRACT</div>
+    
+    <!-- Main Widget View -->
+    <div class="widget-content" id="widget-main-view">
+      <header>
+        <h2 class="widget-header" id="widget-label">balance</h2>
+      </header>
+      
+      <div class="balance-display-container">
+        <!-- Main Heading displaying the Rupees Balance -->
+        <h1 class="balance-value" id="balance-amount">₹0</h1>
+      </div>
+      
+      <footer class="widget-footer">
+        <span class="sub-label" id="widget-status">MANUAL ACTIVE</span>
+        <div class="red-dot" id="widget-accent-dot" aria-hidden="true"></div>
+      </footer>
+    </div>
+
+    <!-- Swipe Down Overlay: Incoming (Add) -->
+    <section class="overlay incoming" id="overlay-incoming" aria-label="Add Incoming Balance">
+      <div class="overlay-header">
+        <span class="overlay-title">INCOMING AMOUNT</span>
+        <button class="overlay-close" id="btn-close-incoming" type="button" aria-label="Close add panel">✕</button>
+      </div>
+      <div class="overlay-body">
+        <div class="amount-input-wrapper">
+          <span class="amount-prefix" aria-hidden="true">+</span>
+          <input 
+            type="number" 
+            pattern="[0-9]*" 
+            inputmode="numeric" 
+            class="amount-input" 
+            id="input-incoming" 
+            placeholder="0" 
+            aria-label="Enter incoming amount in rupees"
+          >
+        </div>
+      </div>
+      <div class="overlay-footer">
+        <button class="action-btn submit" id="btn-submit-incoming" type="button">ADD</button>
+      </div>
+    </section>
+
+    <!-- Swipe Up Overlay: Outgoing (Subtract) -->
+    <section class="overlay outgoing" id="overlay-outgoing" aria-label="Subtract Outgoing Balance">
+      <div class="overlay-header">
+        <span class="overlay-title">OUTGOING AMOUNT</span>
+        <button class="overlay-close" id="btn-close-outgoing" type="button" aria-label="Close subtract panel">✕</button>
+      </div>
+      <div class="overlay-body">
+        <div class="amount-input-wrapper">
+          <span class="amount-prefix" aria-hidden="true">-</span>
+          <input 
+            type="number" 
+            pattern="[0-9]*" 
+            inputmode="numeric" 
+            class="amount-input" 
+            id="input-outgoing" 
+            placeholder="0" 
+            aria-label="Enter outgoing amount in rupees"
+          >
+        </div>
+      </div>
+      <div class="overlay-footer">
+        <button class="action-btn submit" id="btn-submit-outgoing" type="button">SUBTRACT</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/app.js"></script>
+  <script>
+    // Register Service Worker for PWA offline capabilities
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('ServiceWorker registered successfully: ', registration.scope);
+          })
+          .catch((error) => {
+            console.log('ServiceWorker registration failed: ', error);
+          });
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="140" fill="#000000" stroke="#262626" stroke-width="12"/>
+  <!-- Dot matrix letter B -->
+  <circle cx="180" cy="160" r="16" fill="#FFFFFF" />
+  <circle cx="240" cy="160" r="16" fill="#FFFFFF" />
+  <circle cx="300" cy="160" r="16" fill="#FFFFFF" />
+  
+  <circle cx="180" cy="220" r="16" fill="#FFFFFF" />
+  <circle cx="300" cy="220" r="16" fill="#FFFFFF" />
+  
+  <circle cx="180" cy="280" r="16" fill="#FFFFFF" />
+  <circle cx="240" cy="280" r="16" fill="#FFFFFF" />
+  <circle cx="300" cy="280" r="16" fill="#FFFFFF" />
+  
+  <circle cx="180" cy="340" r="16" fill="#FFFFFF" />
+  <circle cx="300" cy="340" r="16" fill="#FFFFFF" />
+  
+  <circle cx="180" cy="400" r="16" fill="#FFFFFF" />
+  <circle cx="240" cy="400" r="16" fill="#FFFFFF" />
+  <circle cx="300" cy="400" r="16" fill="#FFFFFF" />
+  
+  <!-- Nothing OS Signature Red Accent Dot -->
+  <circle cx="380" cy="400" r="16" fill="#FF3F3F" />
+</svg>
