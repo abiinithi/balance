@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (length > 8) {
       balanceAmountEl.style.fontSize = '30px';
     } else {
-      balanceAmountEl.style.fontSize = '38px';
+      balanceAmountEl.style.fontSize = '42px';
     }
   }
 

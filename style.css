@@ -70,10 +70,8 @@ body {
 /* 2x2 Square Widget Container */
 .widget-container {
   position: relative;
-  width: calc(100vw - 16px);
-  height: calc(100vh - 16px);
-  max-width: 320px;
-  max-height: 320px;
+  width: min(88vw, 88vh, 360px);
+  height: min(88vw, 88vh, 360px);
   aspect-ratio: 1 / 1;
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
@@ -133,7 +131,7 @@ body {
 
 .balance-value {
   font-family: var(--font-matrix);
-  font-size: 38px;
+  font-size: 42px;
   line-height: 1.1;
   color: var(--text-primary);
   word-break: break-all;
