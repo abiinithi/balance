@@ -61,7 +61,7 @@ body {
   justify-content: center;
   align-items: flex-start;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   font-family: var(--font-mono);
   color: var(--text-primary);
@@ -78,7 +78,8 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 28px;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   position: relative;
 }
 
@@ -466,9 +467,12 @@ body {
 .savings-section {
   width: 100%;
   max-width: 360px;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  overflow: hidden;
   margin-bottom: 32px;
 }
 
@@ -510,10 +514,17 @@ body {
 }
 
 .buckets-list {
+  flex: 1;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.buckets-list::-webkit-scrollbar {
+  display: none;              /* Chrome, Safari, Opera */
 }
 
 .bucket-item {
