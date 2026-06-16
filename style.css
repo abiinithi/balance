@@ -1,4 +1,4 @@
-/* Nothing OS 2x2 Widget CSS Stylesheet */
+/* Nothing OS Minimal App CSS Stylesheet */
 
 @font-face {
   font-family: 'NDot57';
@@ -56,22 +56,37 @@ body {
   margin: 0;
   padding: 0;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  overflow: hidden;
+  align-items: flex-start;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   font-family: var(--font-mono);
   color: var(--text-primary);
   user-select: none;
   -webkit-user-select: none;
 }
 
-/* 2x2 Square Widget Container */
+/* App Main Wrapper (max-width for mobile app layout) */
+.app-layout {
+  width: 100%;
+  max-width: 480px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* 2x2 Square Widget Container (Main Balance Card) */
 .widget-container {
   position: relative;
-  width: min(88vw, 88vh, 360px);
-  height: min(88vw, 88vh, 360px);
+  width: 100%;
+  max-width: 360px;
   aspect-ratio: 1 / 1;
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
@@ -82,6 +97,7 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 
               inset 0 0 12px rgba(255, 255, 255, 0.015);
   transition: border-color 0.2s ease;
+  flex-shrink: 0;
 }
 
 .widget-container:active {
@@ -184,7 +200,7 @@ body {
   bottom: 8px;
 }
 
-/* sliding overlays (Incoming & Outgoing inputs) */
+/* Sliding Overlays (General Balance sheets) */
 .overlay {
   position: absolute;
   left: 0;
@@ -217,6 +233,32 @@ body {
 /* Overlay Active Class */
 .overlay.active {
   transform: translateY(0) !important;
+}
+
+/* App-Level Full Screen Drawers */
+.overlay.app-level {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 480px;
+  height: 100%;
+  z-index: 100;
+  background-color: var(--overlay-bg);
+}
+
+.overlay.app-level.incoming {
+  transform: translate(-50%, -100%);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.overlay.app-level.outgoing {
+  transform: translate(-50%, 100%);
+  border-top: 1px solid var(--border-color);
+}
+
+.overlay.app-level.active {
+  transform: translate(-50%, 0) !important;
 }
 
 /* Overlay Header */
@@ -256,6 +298,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 20px;
 }
 
 .amount-input-wrapper {
@@ -300,6 +343,51 @@ body {
   color: rgba(255, 63, 63, 0.15);
 }
 
+/* Field Groups for Bucket Manager Overlay */
+.bucket-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-label {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  color: var(--text-secondary);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.text-input {
+  width: 100%;
+  background: #09090A;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.text-input:focus {
+  border-color: #3D3D42;
+}
+
+.amount-input-wrapper.small .amount-input {
+  font-size: 24px;
+  background: #09090A;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-family: var(--font-matrix);
+}
+
+.amount-input-wrapper.small .amount-input:focus {
+  border-color: #3D3D42;
+}
+
 /* Hide Spin Buttons */
 .amount-input::-webkit-outer-spin-button,
 .amount-input::-webkit-inner-spin-button {
@@ -316,6 +404,18 @@ body {
   justify-content: flex-end;
   gap: 16px;
   width: 100%;
+}
+
+.overlay-footer.split {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.action-group-right {
+  display: flex;
+  gap: 12px;
 }
 
 .action-btn {
@@ -341,19 +441,129 @@ body {
   border-color: var(--text-primary);
 }
 
+.action-btn.submit:active {
+  background-color: #E0E0E0;
+}
+
+.action-btn.danger {
+  border-color: rgba(255, 63, 63, 0.2);
+  color: var(--accent-red);
+}
+
+.action-btn.danger:active {
+  background-color: var(--accent-red);
+  color: var(--text-primary);
+  border-color: var(--accent-red);
+}
+
 .outgoing .action-btn.submit:active {
   background-color: var(--accent-red);
   border-color: var(--accent-red);
   color: var(--text-primary);
 }
 
-.action-btn.submit:active {
-  background-color: #E0E0E0;
+/* Savings Buckets Section Styling */
+.savings-section {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.savings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 4px;
+}
+
+.savings-heading {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  color: var(--text-secondary);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+}
+
+.add-bucket-btn {
+  background: transparent;
+  border: 1px dashed var(--border-color);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 6px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-bucket-btn:active {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: #3D3D42;
+}
+
+.buckets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.bucket-item {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.005);
+}
+
+.bucket-item:active {
+  border-color: #333336;
+  transform: scale(0.985);
+  background-color: #0F0F11;
+}
+
+.bucket-name {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+
+.bucket-balance {
+  font-family: var(--font-matrix);
+  font-size: 18px;
+  color: var(--text-primary);
+}
+
+/* Empty Buckets Placeholder */
+.buckets-empty {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  text-align: center;
+  padding: 32px 0;
+  border: 1px dashed rgba(255, 255, 255, 0.05);
+  border-radius: 18px;
+  width: 100%;
 }
 
 /* Dotted grid background overlay effect */
 .grid-overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
