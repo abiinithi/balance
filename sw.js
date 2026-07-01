@@ -1,11 +1,15 @@
-const CACHE_NAME = 'balance-cache-v1';
+const CACHE_NAME = 'balance-cache-v2';
 const ASSETS = [
   '/',
   '/index.html',
   '/style.css',
   '/app.js',
   '/manifest.json',
-  '/icon.svg'
+  '/icon.svg',
+  '/fonts/Ndot57-Regular.otf',
+  '/fonts/NType82Mono-Regular.otf',
+  '/fonts/LetteraMonoLL-Regular.otf',
+  '/fonts/SpaceMono-Regular.otf'
 ];
 
 // Install Event
