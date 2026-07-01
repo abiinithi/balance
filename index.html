@@ -21,7 +21,9 @@
   <!-- App Main Wrapper -->
   <div class="app-layout">
 
-    <!-- Top Section: General Balance Widget -->
+    <!-- TAB: DASHBOARD -->
+    <div id="tab-dashboard" class="tab-content active">
+      <!-- Top Section: General Balance Widget -->
     <main class="widget-container" id="widget-card">
       <!-- Swipe Hints -->
       <div class="swipe-hint top" id="hint-top" aria-hidden="true">↓ ADD</div>
@@ -30,7 +32,9 @@
       <!-- Main Widget View -->
       <div class="widget-content" id="widget-main-view">
         <header>
-          <h2 class="widget-header" id="widget-label">balance</h2>
+          <select class="widget-header-select" id="widget-bucket-select" aria-label="Select bucket to display">
+            <option value="total">TOTAL BALANCE</option>
+          </select>
         </header>
 
         <div class="balance-display-container">
@@ -91,6 +95,29 @@
           <button class="action-btn submit" id="btn-submit-outgoing" type="button">SUBTRACT</button>
         </div>
       </section>
+
+      <!-- Widget Level Overlay: Transaction Details (Bucket & Note) -->
+      <section class="overlay incoming" id="overlay-transaction-details" aria-label="Transaction Details" style="z-index: 15;">
+        <div class="overlay-header">
+          <span class="overlay-title" id="transaction-details-title">DETAILS</span>
+          <button class="overlay-close" id="btn-close-transaction-details" type="button">✕</button>
+        </div>
+        <div class="overlay-body" style="justify-content: flex-start; padding-top: 20px;">
+          <div class="bucket-field-group">
+            <label for="select-transaction-bucket" class="field-label">Select Bucket</label>
+            <select class="text-input" id="select-transaction-bucket">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <div class="bucket-field-group" style="margin-top: 16px;">
+            <label for="input-transaction-note" class="field-label">Note (Optional)</label>
+            <input type="text" class="text-input" id="input-transaction-note" placeholder="What was this for?" maxlength="50">
+          </div>
+        </div>
+        <div class="overlay-footer">
+          <button class="action-btn submit" id="btn-confirm-transaction" type="button">CONFIRM</button>
+        </div>
+      </section>
     </main>
 
     <!-- Savings Section -->
@@ -104,23 +131,45 @@
         <!-- Dynamic list entries rendered via JS -->
       </div>
     </section>
+    </div> <!-- END TAB: DASHBOARD -->
+
+    <!-- TAB: HISTORY -->
+    <div id="tab-history" class="tab-content">
+      <div class="history-header">
+        <h2 class="savings-heading">TRANSACTION HISTORY</h2>
+      </div>
+      <div class="history-list" id="history-list">
+        <!-- Dynamic transaction entries rendered via JS -->
+      </div>
+    </div> <!-- END TAB: HISTORY -->
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" id="nav-dashboard" type="button">DASHBOARD</button>
+      <button class="nav-btn" id="nav-history" type="button">HISTORY</button>
+    </nav>
 
     <!-- Overlay: Create Bucket Drawer (slides down from top of screen) -->
-    <section class="overlay incoming app-level" id="overlay-create-bucket" aria-label="Create Savings Bucket">
+    <section class="overlay incoming app-level" id="overlay-create-bucket" aria-label="Create Bucket">
       <div class="overlay-header">
-        <span class="overlay-title">NEW SAVINGS BUCKET</span>
+        <span class="overlay-title">NEW BUCKET</span>
         <button class="overlay-close" id="btn-close-create-bucket" type="button" aria-label="Close panel">✕</button>
       </div>
       <div class="overlay-body">
-        <div class="amount-input-wrapper">
-          <input
-            type="text"
-            class="amount-input"
-            id="input-create-bucket-name"
-            placeholder="Bucket Name"
-            aria-label="Enter new bucket name"
-            maxlength="20"
-          >
+        <div class="bucket-field-group">
+          <label for="select-create-bucket-type" class="field-label">Type</label>
+          <select class="text-input" id="select-create-bucket-type">
+            <option value="budget">Monthly Budget</option>
+            <option value="saving">Savings Goal</option>
+          </select>
+        </div>
+        <div class="bucket-field-group">
+          <label for="input-create-bucket-name" class="field-label">Name</label>
+          <input type="text" class="text-input" id="input-create-bucket-name" placeholder="e.g. Groceries" maxlength="20">
+        </div>
+        <div class="bucket-field-group">
+          <label for="input-create-bucket-target" class="field-label">Target Amount (₹)</label>
+          <input type="number" pattern="[0-9]*" inputmode="numeric" class="text-input" id="input-create-bucket-target" placeholder="0">
         </div>
       </div>
       <div class="overlay-footer">
@@ -139,6 +188,12 @@
         <div class="bucket-field-group">
           <label for="input-bucket-name" class="field-label">Rename Bucket</label>
           <input type="text" class="text-input" id="input-bucket-name" placeholder="Enter bucket name" maxlength="20">
+        </div>
+
+        <!-- Target Amount -->
+        <div class="bucket-field-group">
+          <label for="input-bucket-target" class="field-label">Target Amount</label>
+          <input type="number" pattern="[0-9]*" inputmode="numeric" class="text-input" id="input-bucket-target" placeholder="0">
         </div>
 
         <!-- Transaction Amount -->
@@ -167,6 +222,25 @@
     </section>
 
   </div>
+
+  <!-- Overlay: Month-End Resolution (Appears on Launch) -->
+  <section class="overlay app-level incoming" id="overlay-month-end" aria-label="Month End Resolution" style="z-index: 200;">
+    <div class="overlay-header">
+      <span class="overlay-title">MONTH END RESOLUTION</span>
+    </div>
+    <div class="overlay-body" style="justify-content: flex-start; overflow-y: auto;">
+      <p style="font-family: var(--font-sans); font-size: 11px; color: var(--text-secondary); line-height: 1.4; margin: 0 0 16px 0;">
+        You have leftover funds in your budget buckets from last month. Resolve them before starting the new month.
+      </p>
+      
+      <div id="resolution-buckets-container" style="display: flex; flex-direction: column; gap: 16px;">
+        <!-- Dynamically populated leftover buckets -->
+      </div>
+    </div>
+    <div class="overlay-footer">
+      <button class="action-btn submit" id="btn-complete-resolution" type="button" disabled>FINISH & START MONTH</button>
+    </div>
+  </section>
 
   <script src="/app.js"></script>
   <script>
