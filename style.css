@@ -113,6 +113,7 @@ body {
               inset 0 0 12px rgba(255, 255, 255, 0.015);
   transition: border-color 0.2s ease;
   flex-shrink: 0;
+  touch-action: none;
 }
 
 .widget-container:active {
@@ -746,4 +747,10 @@ body {
 .history-delete:active {
   color: var(--accent-red);
   border-color: var(--accent-red);
+}
+
+/* Mobile Safari Input Fix */
+input, select, textarea {
+  user-select: auto !important;
+  -webkit-user-select: auto !important;
 }

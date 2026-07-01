@@ -750,7 +750,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initApp();
   }
 
-  // --- Touch and Mouse Gestures for Top Card (General Balance Card) ---
+  // --- Unified Pointer Gestures for Top Card (General Balance Card) ---
   let startY = 0;
   let startX = 0;
   let currentY = 0;
@@ -768,26 +768,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // ignore if touching the select element
     if (e.target === widgetBucketSelect) return;
     
-    const touch = e.touches ? e.touches[0] : e;
-    startY = touch.clientY;
-    startX = touch.clientX;
+    // Pointer events map directly to e without needing e.touches checks
+    startY = e.clientY;
+    startX = e.clientX;
     isDragging = true;
     cardHeight = widgetCard.offsetHeight;
+    
+    // Set pointer capture to lock tracking to this element even if moving fast
+    widgetCard.setPointerCapture(e.pointerId);
   }
 
   function dragMove(e) {
     if (!isDragging || isOverlayOpen) return;
 
-    const touch = e.touches ? e.touches[0] : e;
-    currentY = touch.clientY;
-    currentX = touch.clientX;
+    currentY = e.clientY;
+    currentX = e.clientX;
 
     const diffY = currentY - startY;
     const diffX = currentX - startX;
 
     if (Math.abs(diffY) > Math.abs(diffX)) {
-      e.preventDefault();
-
       if (diffY > 0) {
         widgetCard.classList.add('drag-down');
         widgetCard.classList.remove('drag-up');
@@ -804,9 +804,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function dragEnd() {
+  function dragEnd(e) {
     if (!isDragging || isOverlayOpen) return;
     isDragging = false;
+
+    // Release pointer capture cleanly
+    try { widgetCard.releasePointerCapture(e.pointerId); } catch(err) {}
 
     const diffY = currentY - startY;
     const threshold = cardHeight * 0.25;
@@ -823,15 +826,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  widgetCard.addEventListener('touchstart', dragStart, { passive: false });
-  widgetCard.addEventListener('touchmove', dragMove, { passive: false });
-  widgetCard.addEventListener('touchend', dragEnd);
-
-  widgetCard.addEventListener('mousedown', dragStart);
-  window.addEventListener('mousemove', (e) => {
-    if (isDragging) dragMove(e);
-  });
-  window.addEventListener('mouseup', () => {
-    if (isDragging) dragEnd();
-  });
+  // Unified bindings replacing all touchstart/mousedown event blocks
+  widgetCard.addEventListener('pointerdown', dragStart);
+  widgetCard.addEventListener('pointermove', dragMove);
+  widgetCard.addEventListener('pointerup', dragEnd);
+  widgetCard.addEventListener('pointercancel', dragEnd); // Safely handles incoming phone calls/system interruptions
 });
